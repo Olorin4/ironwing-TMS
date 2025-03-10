@@ -1,0 +1,250 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// prisma/schema.prisma
+// WARNING: This schema is the single source of truth for the entire server
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+// -------------------------------------------------------------------------
+// User
+// -------------------------------------------------------------------------
+model user {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  role       String   @default("user") // "admin", "dispatcher", "driver"
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  driver     driver?
+  dispatcher dispatcher?
+  company_id Int?
+  company    company? @relation(fields: [company_id], references: [id], onDelete: Cascade)
+
+  @@index([company_id])  // Correct way to index company_id
+}
+
+
+// ---------------------------------------------------------------------------
+// Drivers
+// ------------------------------------------------------------------------
+model driver {
+  id           Int       @id @default(autoincrement())
+  user_id      Int?      @unique  
+  first_name   String
+  last_name    String
+  company_id   Int?      
+  truck_id     Int?
+  trailer_id   Int?
+  created_at   DateTime  @default(now())
+
+  user user?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  company      company?  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  truck        truck?    @relation(fields: [truck_id], references: [id])
+  trailer      trailer?  @relation(fields: [trailer_id], references: [id])
+
+  call_logs    call_log[]
+  message_logs message_log[]
+
+  // Many-to-Many with dispatchers
+  assigned_dispatchers dispatcher_driver[]
+
+  @@index([company_id])
+  @@index([user_id])
+}
+
+
+// ---------------------------------------------------------------------------
+// Dispatchers
+// ---------------------------------------------------------------------------
+model dispatcher {
+  id           Int       @id @default(autoincrement())
+  user_id      Int?      @unique  
+  first_name   String
+  last_name    String
+  created_at   DateTime  @default(now())
+
+  // Link to users
+  user         user?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  // Many-to-Many with drivers
+  assigned_drivers dispatcher_driver[]
+}
+
+
+model dispatcher_driver {
+  dispatcher_id Int
+  driver_id     Int
+
+  dispatcher dispatcher @relation(fields: [dispatcher_id], references: [id], onDelete: Cascade)
+  driver     driver     @relation(fields: [driver_id], references: [id], onDelete: Cascade)
+
+  @@index([company_id])
+  @@index([user_id])
+}
+
+
+// ---------------------------------------------------------------------------
+// Companies
+// ---------------------------------------------------------------------------
+model company {
+  id            Int      @id @default(autoincrement())
+  name          String   @unique
+  phone         String?
+  email         String?
+  website       String?
+  mc_number     String?
+  dot_number    String?
+  ein_number    String?
+
+  // Numeric fields for how many drivers/trucks/trailers a company has
+  drivers_total   Int? @default(0)
+  trucks_total   Int? @default(0)
+  trailers_total Int? @default(0)
+
+  // Relations
+  users          user[]
+  dispatchers    dispatcher[]
+  drivers        driver[]
+  trucks         truck[]
+  trailers       trailer[]
+  call_logs      call_log[] @relation("CompanyCallLogs")
+  message_logs   message_log[] @relation("CompanyMessages")
+}
+
+
+// ---------------------------------------------------------------------------
+// Trucks
+// ---------------------------------------------------------------------------
+model truck {
+  id            Int    @id @default(autoincrement())
+  model         String
+  make          String
+  trailer_type  String
+  plate_number  String
+
+  // Link truck to a company
+  company_id Int?
+  company    company? @relation(fields: [company_id], references: [id])
+
+  // If multiple drivers can share a single truck
+  drivers driver[]
+
+  @@index([company_id])
+}
+
+
+// ---------------------------------------------------------------------------
+// Trailers
+// ---------------------------------------------------------------------------
+model trailer {
+  id            Int    @id @default(autoincrement())
+  type          String
+  model         String
+  make          String
+  trailer_type  String
+  plate_number  String
+
+  // Link trailer to a company
+  company_id Int?
+  company    company? @relation(fields: [company_id], references: [id])
+
+  // If multiple drivers can share a single trailer
+  drivers driver[]
+
+  @@index([company_id])
+}
+
+
+// ---------------------------------------------------------------------------
+// iron-wing-dispatching.com
+// ---------------------------------------------------------------------------
+model SignUpForm {
+  id           Int      @id @default(autoincrement())
+  first_name   String
+  last_name    String
+  email        String   
+  phone        String
+  fleet_size   String
+  trailer_type String
+  plan         String
+  submit_date  DateTime @default(now())
+  status       String   @default("pending") // "pending", "reviewed", "approved", "rejected"
+
+  // New relations to track approved sign-ups
+  user_id      Int? @unique
+  user         user? @relation(fields: [user_id], references: [id])
+  company_id   Int?
+  company      company? @relation(fields: [company_id], references: [id])
+
+  @@index([company_id])
+  @@index([user_id])
+
+  @@map("sign_up_form")
+}
+
+model ContactSubmission {
+  id          Int      @id @default(autoincrement())
+  email       String
+  phone       String?
+  message     String
+  submit_date DateTime @default(now())
+
+  @@map("contact_submission")
+}
+
+
+// ---------------------------------------------------------------------------
+// Twilio-voip
+// ---------------------------------------------------------------------------
+model call_log {
+  id            Int      @id @default(autoincrement())
+  call_sid      String   @unique
+  timestamp     DateTime @default(now())
+  from_number   String
+  to_number     String
+  status        String?
+  duration      Int?     @default(0)
+  direction     String?  @default("unknown")
+
+  // Relation to drivers
+  driver_id     Int?
+  driver        driver? @relation(fields: [driver_id], references: [id])
+
+  // Relation to company through driver
+  company_id    Int?
+  company       company? @relation("CompanyCallLogs", fields: [company_id], references: [id])
+
+  @@map("call_logs")
+}
+
+model message_log {
+  id            Int       @id @default(autoincrement())
+  message_sid   String    @unique
+  from_number   String
+  to_number     String
+  body          String
+  timestamp     DateTime @default(now())
+
+  // Relation to drivers
+  driver_id     Int?
+  driver        driver? @relation(fields: [driver_id], references: [id])
+
+  // Relation to company through drivers
+  company_id    Int?
+  company       company? @relation("CompanyMessages", fields: [company_id], references: [id])
+
+  @@map("message_logs")
+}
