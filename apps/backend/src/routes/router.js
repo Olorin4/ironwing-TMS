@@ -15,7 +15,7 @@ const router = express.Router();
 router.use("/auth", authRouter);
 
 // Future feature-based routes
-// router.use('/users', userRouter);;
+// router.use('/users', userRouter);
 // router.use('/jobs', jobRouter);
 
 // Routes for Sign-Up & Contact Forms from iron-wing-dispatching.com
