@@ -1,41 +1,42 @@
 {
-  "name": "ironwing-backend",
-  "version": "0.5.1",
-  "description": "Server side of iron-wing-dispatching.com handling form submissions, leads database and integration with CMR..",
-  "type": "module",
-  "main": "app.js",
-  "scripts": {
-      "dev": "NODE_ENV=development nodemon src/app.js",
-      "start": "NODE_ENV=production node src/app.js",
-      "start:prod": "NODE_ENV=production node src/app.js",
-      "test": "jest --passWithNoTests",
-      "lint": "eslint src --ext .js",
-      "lint:fix": "eslint src --ext .js --fix",
-      "clean": "rm -rf dist",
-      "build": "babel src -d dist"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-      "@prisma/client": "^6.4.1",
-      "bcryptjs": "^3.0.2",
-      "body-parser": "^1.20.3",
-      "connect-redis": "^8.0.1",
-      "cors": "^2.8.5",
-      "date-fns": "^3.6.0",
-      "dotenv": "^16.4.7",
-      "dotenv-flow": "^4.1.0",
-      "express": "^4.21.2",
-      "express-session": "^1.18.1",
-      "jsonwebtoken": "^9.0.2",
-      "nodemailer": "^6.10.0",
-      "passport": "^0.7.0",
-      "passport-jwt": "^4.0.1",
-      "passport-local": "^1.0.0",
-      "redis": "^4.7.0"
-  },
-  "devDependencies": {
-      "nodemon": "^3.0.1"
-  }
+    "name": "ironwing-backend",
+    "version": "0.5.1",
+    "description": "Server side of iron-wing-dispatching.com handling form submissions, leads database and integration with CMR..",
+    "type": "module",
+    "main": "app.js",
+    "scripts": {
+        "dev": "NODE_ENV=development nodemon src/app.js",
+        "start": "NODE_ENV=production node src/app.js",
+        "start:prod": "NODE_ENV=production node src/app.js",
+        "test": "jest --passWithNoTests",
+        "lint": "eslint src --ext .js",
+        "lint:fix": "eslint src --ext .js --fix",
+        "clean": "rm -rf dist",
+        "build": "babel src -d dist"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@prisma/client": "^6.4.1",
+        "bcryptjs": "^3.0.2",
+        "body-parser": "^1.20.3",
+        "connect-redis": "^8.0.1",
+        "cors": "^2.8.5",
+        "date-fns": "^3.6.0",
+        "dotenv": "^16.4.7",
+        "dotenv-flow": "^4.1.0",
+        "express": "^4.21.2",
+        "express-session": "^1.18.1",
+        "jsonwebtoken": "^9.0.2",
+        "nodemailer": "^6.10.0",
+        "passport": "^0.7.0",
+        "passport-jwt": "^4.0.1",
+        "passport-local": "^1.0.0",
+        "redis": "^4.7.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1",
+        "prisma": "^6.4.1"
+    }
 }
