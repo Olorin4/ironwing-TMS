@@ -50,7 +50,7 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_HETZNER_SERVER_KEY }}
                   SERVER_IP: ${{ secrets.SERVER_IP }}
               run: |
-                  echo "$SSH_PRIVATE_KEY" > private_key.pem
+                  echo -e "${SSH_PRIVATE_KEY//_/\\n}" > private_key.pem
                   chmod 600 private_key.pem
 
                   echo "🚀 Transferring backend files to the server using rsync..."
