@@ -3,54 +3,49 @@ name: CI/CD Pipeline
 on:
     push:
         branches:
-            - master # Runs when pushing to the master branch
+            - master
 
 jobs:
-    build:
+    build-and-deploy-backend:
         if: github.actor == 'Olorin4'
         runs-on: ubuntu-latest
 
         steps:
-            # Step 1: Check out the code
             - name: Checkout code
-              uses: actions/checkout@v2
+              uses: actions/checkout@v4
 
-            # Step 2: Set up Node.js
             - name: Read Node.js version from .nvmrc
               run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
             - name: Set up Node.js
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v4
               with:
                   node-version: ${{ env.NODE_VERSION }}
 
-            # Step 3: Install dependencies
             - name: Install dependencies
-              run: npm install
+              run: npm install --legacy-peer-deps
 
-            # Step 4: Run tests (skips failure if no tests exist)
-            - name: Run tests
-              run: npm test --passWithNoTests
+            - name: Run backend tests
+              run: npm run test --workspace=apps/backend -- --passWithNoTests
 
-            # Step 5: Generate .env file from GitHub Secrets
             - name: Generate .env.production file
               run: |
-                  echo "NODE_ENV=production" > .env.production
-                  echo "PORT=${{ secrets.PORT }}" >> .env.production
-                  echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> .env.production
-                  echo "DB_URL=${{ secrets.DB_URL }}" >> .env.production
-                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.production
-                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.production
-                  echo "DB_USER=${{ secrets.DB_USER }}" >> .env.production
-                  echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env.production
-                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.production
-                  echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env.production
-                  echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> .env.production
-                  echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> .env.production
-                  echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> .env.production
-                  echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env.production
+                  echo "NODE_ENV=production" > apps/backend/.env.production
+                  echo "PORT=${{ secrets.PORT }}" >> apps/backend/.env.production
+                  echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> apps/backend/.env.production
+                  echo "DB_URL=${{ secrets.DB_URL }}" >> apps/backend/.env.production
+                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> apps/backend/.env.production
+                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> apps/backend/.env.production
+                  echo "DB_USER=${{ secrets.DB_USER }}" >> apps/backend/.env.production
+                  echo "DB_PASS=${{ secrets.DB_PASS }}" >> apps/backend/.env.production
+                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> apps/backend/.env.production
+                  echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> apps/backend/.env.production
+                  echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> apps/backend/.env.production
+                  echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> apps/backend/.env.production
+                  echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> apps/backend/.env.production
+                  echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> apps/backend/.env.production
 
-            # Step 6: Deploy to Server (test)
-            - name: Deploy to Server
+            - name: Deploy Backend to Server
               env:
                   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_HETZNER_SERVER_KEY }}
                   SERVER_IP: ${{ secrets.SERVER_IP }}
@@ -58,27 +53,24 @@ jobs:
                   echo "$SSH_PRIVATE_KEY" > private_key.pem
                   chmod 600 private_key.pem
 
-                  echo "🚀 Transferring files to the server using rsync..."
+                  echo "🚀 Transferring backend files to the server using rsync..."
                   rsync -avz --exclude='node_modules' --exclude='.git' --exclude='.github' --exclude='logs' \
-                    -e "ssh -i private_key.pem -o StrictHostKeyChecking=no" ./ \
+                    -e "ssh -i private_key.pem -o StrictHostKeyChecking=no" apps/backend/ \
                     NickKalas@$SERVER_IP:/var/www/ironwing-backend
 
-                  echo "🚀 Installing dependencies and restarting PM2..."
+                  echo "🚀 Installing dependencies, migrating DB, restarting PM2..."
                   ssh -i private_key.pem -o StrictHostKeyChecking=no NickKalas@$SERVER_IP << 'EOF'
                     cd /var/www/ironwing-backend
                     mv .env.production .env
 
-                    # Reinstall deps if package-lock.json changed
                     npm install --omit=dev
 
-                    # Apply database migrations safely
-                    echo "🚀 Applying Prisma Migrations..."
+                    echo "🚀 Running Prisma Migrations..."
                     npx prisma migrate deploy
                     npx prisma generate
 
-                    # Restart (or start) your PM2 process
-                    pm2 restart ironwing-backend || pm2 start server.js --name ironwing-backend
+                    pm2 restart ironwing-backend || pm2 start src/app.js --name ironwing-backend
                     pm2 save
 
-                    echo "✅ Deployment completed successfully."
+                    echo "✅ Backend deployment completed successfully."
                   EOF
