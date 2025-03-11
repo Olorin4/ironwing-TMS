@@ -1,7 +1,9 @@
 {
   "name": "utils",
-  "version": "1.0.0",
+  "version": "0.5.1",
   "private": true,
   "type": "module",
-  "dependencies": {}
+  "dependencies": {
+    "date-fns": "^3.6.0"
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "ironwing-backend",
-  "version": "1.0.0",
+  "version": "0.5.1",
   "description": "Server side of iron-wing-dispatching.com handling form submissions, leads database and integration with CMR..",
   "type": "module",
   "main": "app.js",
@@ -36,8 +36,6 @@
       "redis": "^4.7.0"
   },
   "devDependencies": {
-      "concurrently": "^7.6.0",
-      "dotenv-cli": "^8.0.0",
       "nodemon": "^3.0.1"
   }
 }

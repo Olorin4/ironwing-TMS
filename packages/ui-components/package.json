@@ -1,7 +1,12 @@
 {
-  "name": "ui-components",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "dependencies": {}
+    "name": "ui-components",
+    "version": "0.5.1",
+    "private": true,
+    "type": "module",
+    "main": "index.js",
+    "react-native": "index.native.js",
+    "dependencies": {
+        "react": "^18.0.0",
+        "react-native": "^0.72.4"
+    }
 }
