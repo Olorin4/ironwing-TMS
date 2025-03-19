@@ -4,7 +4,7 @@ const signature = `
     <br>
     <p>Best regards,</p>
     <p>Nick Kalas<br>
-       Manager<br>
+       CTO<br>
     <a href="https://iron-wing-dispatching.com">Iron Wing Dispatching L.L.C.</a>
     </p>
     <p>

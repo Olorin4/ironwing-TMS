@@ -62,7 +62,15 @@ export async function submitForm(req, res) {
     await emailClient(
         email,
         "Thank You for Signing Up!",
-        `Hello ${first_name},\n\nThank you for signing up with Iron Wing Dispatching. We will contact you shortly.\n\nAll the best,\nIron Wing Dispatching Team`
+        `<pre>
+            Hello ${first_name},
+
+            Thank you for signing up with Iron Wing Dispatching. 
+            We will contact you shortly.
+
+            All the best,
+            Iron Wing Dispatching Team
+        </pre>`
     );
 
     await emailAdmin(
