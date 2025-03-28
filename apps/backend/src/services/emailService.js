@@ -31,6 +31,11 @@ export async function sendEmail(mailOptions) {
 
     mailOptions.attachments = [
         {
+            filename: "facebook.png",
+            path: "src/assets/facebook.png",
+            cid: "facebookIcon",
+        },
+        {
             filename: "linkedin_32.png",
             path: "src/assets/linkedin_32.png",
             cid: "linkedinIcon",
@@ -44,7 +49,10 @@ export async function sendEmail(mailOptions) {
 
     try {
         const info = await transporter.sendMail(mailOptions);
-        console.log("📧 Email Sent Successfully:", info.messageId);
+        console.log(
+            `📧 Email Sent Successfully to ${mailOptions.to}:`,
+            info.messageId
+        );
         return info;
     } catch (error) {
         console.error("❌ Error Sending Email:", error);

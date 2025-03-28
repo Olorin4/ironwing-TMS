@@ -63,13 +63,10 @@ export async function submitForm(req, res) {
         email,
         "Thank You for Signing Up!",
         `<pre>
-            Hello ${first_name},
+        Hello ${first_name},
 
-            Thank you for signing up with Iron Wing Dispatching. 
-            We will contact you shortly.
-
-            All the best,
-            Iron Wing Dispatching Team
+        Thank you for signing up with Iron Wing Dispatching. 
+        We will contact you shortly.
         </pre>`
     );
 
@@ -118,7 +115,11 @@ export async function contactForm(req, res) {
     await emailClient(
         email,
         "Thank You for contacting us!",
-        `Hello,\n\nThank you for contacting Iron Wing Dispatching. We will reach out soon.\n\nAll the best,\nIron Wing Dispatching Team`
+        `<pre>
+        Hello,
+        
+        Thank you for contacting Iron Wing Dispatching. We will reach out soon.
+        </pre>`
     );
 
     await emailAdmin(
