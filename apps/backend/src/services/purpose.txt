@@ -1,0 +1,3 @@
+This directory contains services that are shared across multiple features.
+
+A service typically encapsulates complex business logic or handles communication with an external API (e.g., sending emails, processing payments).

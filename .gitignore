@@ -134,3 +134,13 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# Ignore purpose.txt files from architectural refactor
+**/purpose.txt
+
+
+# Ignore development plan
+DEVELOPMENT_PLAN.md
+
+ARCHITECTURE.md

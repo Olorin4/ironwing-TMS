@@ -1,15 +1,15 @@
 // authRouter.js
 
 import express from "express";
-import passport from "../config/passport.js";
+import passport from "../../config/passport.js";
 import {
     registerUser,
     loginJWT,
     loginSession,
     logoutSession,
     getProfile,
-    checkAuthenticated,
-} from "../controllers/authController.js";
+} from "./auth.controller.js";
+import { checkAuthenticated } from "../../middleware/auth.middleware.js";
 
 const authRouter = express.Router();
 
