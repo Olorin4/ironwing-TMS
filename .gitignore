@@ -150,3 +150,5 @@ ironwing-TMS.code-workspace
 
 # Ignore local environment variables
 .env
+
+.env.test

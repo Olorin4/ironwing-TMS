@@ -1,8 +1,7 @@
-// src/middleware/auth.middleware.js
+import { defineAbilitiesFor } from "./auth.abilities.js";
 
-export function checkAuthenticated(req, res, next) {
-    if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: "Unauthorized: Please log in" });
-    }
-    next();
+// Middleware to attach user's abilities to the request object
+export function defineAbilities(req, res, next) {
+	req.ability = defineAbilitiesFor(req.user);
+	next();
 }

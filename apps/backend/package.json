@@ -18,6 +18,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@casl/ability": "^6.7.3",
         "@prisma/client": "^6.4.1",
         "bcryptjs": "^3.0.2",
         "body-parser": "^1.20.3",
@@ -35,7 +36,7 @@
         "passport": "^0.7.0",
         "passport-jwt": "^4.0.1",
         "passport-local": "^1.0.0",
-        "redis": "^4.7.0"
+        "redis": "^4.7.1"
     },
     "devDependencies": {
         "nodemon": "^3.0.1",

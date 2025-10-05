@@ -7,6 +7,7 @@ import passport from "./config/passport.js";
 import apiRouter from "./routes.js";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { defineAbilities } from "./features/auth/auth.middleware.js";
 
 dotenv.config();
 console.log("Database URL:", process.env.DB_URL);
@@ -31,6 +32,7 @@ app.use(express.json());
 app.use(sessionMiddleware); // Apply session middleware globally
 app.use(passport.initialize()); // Initialize Passport globally
 app.use(passport.session()); // Enable session handling for authenticated users
+app.use(defineAbilities); // Attach user abilities to each request
 app.get("/", (req, res) => res.send("Iron Wing API is working!"));
 
 // Register API Routes
