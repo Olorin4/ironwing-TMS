@@ -45,6 +45,10 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server
-app.listen(PORT, "0.0.0.0", () =>
-    console.log(`Iron Wing Server running at http://0.0.0.0:${PORT}`)
-);
+if (process.env.NODE_ENV !== "test") {
+	app.listen(PORT, "0.0.0.0", () =>
+		console.log(`Iron Wing Server running at http://0.0.0.0:${PORT}`)
+	);
+}
+
+export default app;

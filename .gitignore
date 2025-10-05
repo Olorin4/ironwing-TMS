@@ -144,3 +144,9 @@ dist
 DEVELOPMENT_PLAN.md
 
 ARCHITECTURE.md
+
+ironwing-TMS.code-workspace
+
+
+# Ignore local environment variables
+.env

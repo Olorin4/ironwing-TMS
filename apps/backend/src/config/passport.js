@@ -1,9 +1,9 @@
 import passport from "passport";
 import bcrypt from "bcryptjs";
-import { prisma } from "./prismaClient.js";
+import { prisma } from "./prisma.client.js";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as LocalStrategy } from "passport-local";
-import { publicKey } from "../config/generateKeys.js";
+import { publicKey } from "../config/keys.generator.js";
 
 // JWT Strategy (For API & Mobile Users)
 const jwtOptions = {

@@ -1,8 +1,8 @@
 //authController.js
 
 import jwt from "jsonwebtoken";
-import { privateKey } from "../../config/generateKeys.js";
-import { registerUserService, validateLoginService } from "../../services/authService.js";
+import { privateKey } from "../../config/keys.generator.js";
+import { registerUserService, validateLoginService } from "../../services/auth.service.js";
 
 export async function registerUser(req, res) {
     try {

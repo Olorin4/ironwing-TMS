@@ -1,7 +1,7 @@
 // authService.js
 
 import bcrypt from "bcryptjs";
-import { prisma } from "../config/prismaClient.js";
+import { prisma } from "../../config/prisma.client.js";
 
 export async function registerUserService(data) {
   const { email, password, role, companyId } = data;

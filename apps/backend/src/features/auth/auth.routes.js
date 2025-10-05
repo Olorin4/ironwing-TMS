@@ -9,12 +9,10 @@ import {
     logoutSession,
     getProfile,
 } from "./auth.controller.js";
-import { checkAuthenticated } from "../../middleware/auth.middleware.js";
+import { checkAuthenticated } from "./auth.middleware.js";
 
 const authRouter = express.Router();
-
 authRouter.post("/register", registerUser);
-
 // JWT Authentication (for APIs & mobile users)
 authRouter.post("/login/jwt", loginJWT);
 // Protected route requiring a valid JWT token
