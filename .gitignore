@@ -142,7 +142,6 @@ dist
 
 # Ignore development plan
 DEVELOPMENT_PLAN.md
-
 ARCHITECTURE.md
 
 ironwing-TMS.code-workspace
@@ -150,5 +149,8 @@ ironwing-TMS.code-workspace
 
 # Ignore local environment variables
 .env
-
 .env.test
+
+
+# Test folder
+apps/backend/src/tests/
