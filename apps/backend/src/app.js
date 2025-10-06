@@ -2,7 +2,7 @@
 
 import express from "express";
 import dotenv from "dotenv-flow";
-import sessionMiddleware from "./config/session.js";
+import cookieParser from "cookie-parser";
 import passport from "./config/passport.js";
 import apiRouter from "./routes.js";
 import helmet from "helmet";
@@ -29,9 +29,8 @@ app.use(limiter);
 
 // --- Core Middleware ---
 app.use(express.json());
-app.use(sessionMiddleware); // Apply session middleware globally
+app.use(cookieParser()); // Parse cookies from incoming requests
 app.use(passport.initialize()); // Initialize Passport globally
-app.use(passport.session()); // Enable session handling for authenticated users
 app.use(defineAbilities); // Attach user abilities to each request
 app.get("/", (req, res) => res.send("Iron Wing API is working!"));
 

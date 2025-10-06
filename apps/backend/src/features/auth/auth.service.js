@@ -1,5 +1,3 @@
-// authService.js
-
 import bcrypt from "bcryptjs";
 import { prisma } from "../../config/prisma.client.js";
 

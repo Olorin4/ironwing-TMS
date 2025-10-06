@@ -69,27 +69,13 @@ The TMS (Transportation Management System) Project is a modern, scalable, and hi
 
 ### **7. Authentication**
 
-- **Hybrid Authentication (Session-Based for Web, JWT for Mobile & APIs)**:
-
-    - **Session-Based Authentication (Electron Admin Panel)**:
-        - Uses **Passport.js with session strategy**.
-        - Stores session IDs securely in **Redis**.
-        - Uses **HttpOnly, Secure cookies** to prevent token theft.
-    - **JWT Authentication (Mobile Users & APIs)**:
-        - Uses **Passport.js with JWT strategy**.
-        - Provides stateless authentication for **React Native mobile users**.
-        - Works with **RESTful APIs and microservices**.
-    - **Why Use It?**:
-        - Provides **better security** for web users (session-based authentication is more secure).
-        - Ensures **scalability** for mobile users and APIs (JWT is stateless).
-        - Supports **role-based access control (RBAC) with Casl**.
-
-- **Passport.js + JWT (JSON Web Token)**:
-
-    - **Key Features**: Modular authentication with multiple strategies, stateless authentication, signed tokens (HMAC SHA256 or RSA), self-contained claims.
-    - **Why Use It**: Provides full control over authentication, flexible and scalable, no vendor lock-in, integrates seamlessly with Express.js.
-    - **Usage**: Used for username/password authentication, social logins (Google, Facebook), and API token validation.
-    - **Integration**: Combined with Casl for Role-Based Access Control (RBAC) and enforced in the Core Domain Layer.
+- **Unified JWT Authentication**:
+    - The entire platform uses a unified, stateless authentication strategy based on **JSON Web Tokens (JWTs)**, managed by **Passport.js**.
+    - This approach simplifies the backend by removing the need for server-side sessions and a separate session store like Redis for authentication purposes.
+    - **Token Delivery**:
+        - **Desktop Client (Electron)**: For enhanced security, the JWT is sent to the desktop client via a **secure, `HttpOnly` cookie**. This mitigates the risk of token theft from XSS attacks.
+        - **Mobile Client (React Native)**: The JWT is sent in the **JSON response body** of the login request, where it can be securely stored on the device using `Expo SecureStore` or a similar keychain service.
+    - **Integration**: The JWT strategy is combined with **Casl** for powerful Role-Based Access Control (RBAC), which is enforced in the Core Domain Layer.
 
 ### **8. Role-Based Access Control**
 

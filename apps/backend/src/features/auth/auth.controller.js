@@ -1,5 +1,3 @@
-//authController.js
-
 import jwt from "jsonwebtoken";
 import { privateKey } from "../../config/keys.generator.js";
 import { registerUserService, validateLoginService } from "../../services/auth.service.js";
@@ -21,8 +19,8 @@ export async function registerUser(req, res) {
     }
 }
 
-// Login for mobile users
-export async function loginJWT(req, res) {
+// Unified login for both desktop and mobile clients
+export async function login(req, res) {
     try {
         const { email, password } = req.body;
         const user = await validateLoginService({ email, password });
@@ -32,41 +30,34 @@ export async function loginJWT(req, res) {
             expiresIn: "14d",
         });
 
-        res.status(200).json({ token });
+        // For the Electron desktop app, set the token in a secure, HttpOnly cookie.
+        // For the mobile app, it will be sent in the response body.
+        const clientType = req.get("X-Client-Type");
+        if (clientType === "desktop") {
+            res.cookie("jwt", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
+            });
+            res.status(200).json({ user });
+        } else {
+            res.status(200).json({ token, user });
+        }
     } catch (error) {
-        console.error("JWT Login Error:", error.message);
+        console.error("Login Error:", error.message);
         res.status(400).json({ message: error.message });
     }
 }
 
-// Session-based Login for desktop users
-export async function loginSession(req, res) {
-    console.log("Session Login Attempt:", req.body.email);
-    if (!req.user) {
-        console.error("Session Login Failed: No user found");
-        return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    console.log("Session Login Success:", req.user);
-    res.json({ user: req.user });
-}
-
-export async function logoutSession(req, res, next) {
-    if (!req.isAuthenticated()) {
-        return res
-            .status(401)
-            .json({ message: "Unauthorized - Not logged in" });
-    }
-    req.logout((err) => {
-        if (err) return res.status(500).json({ error: "Logout failed" });
-        req.session.destroy((err) => {
-            if (err)
-                return res
-                    .status(500)
-                    .json({ error: "Failed to destroy session" });
-            res.json({ message: "Logged out successfully" });
-        });
+// For the desktop client, logout by clearing the HttpOnly cookie.
+// Mobile clients handle logout by deleting the token from their secure storage.
+export async function logout(req, res) {
+    res.cookie("jwt", "", {
+        httpOnly: true,
+        expires: new Date(0),
     });
+    res.status(200).json({ message: "Logged out successfully" });
 }
 
 export async function getProfile(req, res) {

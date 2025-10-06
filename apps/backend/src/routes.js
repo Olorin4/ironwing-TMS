@@ -1,12 +1,11 @@
-// src/routes.js
 import { Router } from "express";
-import authRoutes from "./features/auth/auth.routes.js";
-import formRoutes from "./features/forms/forms.routes.js";
+import authRouter from "./features/auth/auth.routes.js";
+import formRouter from "./features/forms/forms.routes.js";
 
 const apiRouter = Router();
 
 // Register Feature Routes
-apiRouter.use("/auth", authRoutes);
-apiRouter.use("/forms", formRoutes);
+apiRouter.use("/auth", authRouter);
+apiRouter.use("/forms", formRouter);
 
 export default apiRouter;

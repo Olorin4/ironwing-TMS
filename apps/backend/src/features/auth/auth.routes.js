@@ -1,31 +1,27 @@
-// authRouter.js
-
 import express from "express";
 import passport from "../../config/passport.js";
 import {
     registerUser,
-    loginJWT,
-    loginSession,
-    logoutSession,
+    login,
+    logout,
     getProfile,
 } from "./auth.controller.js";
-import { checkAuthenticated } from "./auth.middleware.js";
 
 const authRouter = express.Router();
+
+// Unified Authentication Routes
 authRouter.post("/register", registerUser);
-// JWT Authentication (for APIs & mobile users)
-authRouter.post("/login/jwt", loginJWT);
-// Protected route requiring a valid JWT token
+authRouter.post("/login", login);
+
+// A unified logout for the desktop client to clear the cookie.
+// Mobile clients will handle logout by deleting the token from secure storage.
+authRouter.post("/logout", logout);
+
+// A single protected route for both clients
 authRouter.get(
     "/profile",
     passport.authenticate("jwt", { session: false }),
     getProfile
 );
-
-// Session-Based Authentication (for desktop users)
-authRouter.post("/login/session", passport.authenticate("local"), loginSession);
-authRouter.post("/logout", logoutSession);
-// Protected route requiring a valid session
-authRouter.get("/profile/session", checkAuthenticated, getProfile);
 
 export default authRouter;

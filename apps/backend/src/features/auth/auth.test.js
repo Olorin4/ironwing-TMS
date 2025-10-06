@@ -43,7 +43,7 @@ describe("Auth API Endpoints", () => {
 		});
 	});
 
-	describe("POST /api/auth/login/jwt", () => {
+	describe("POST /api/auth/login", () => {
 		beforeEach(async () => {
 			// Create a user to log in with
 			await request(app).post("/api/auth/register").send({
@@ -53,17 +53,37 @@ describe("Auth API Endpoints", () => {
 			});
 		});
 
-		it("should return a JWT token for valid credentials", async () => {
-			const res = await request(app).post("/api/auth/login/jwt").send({
-				email: "login@example.com",
-				password: "password123",
+		describe("Mobile Client", () => {
+			it("should return a JWT token in the body", async () => {
+				const res = await request(app).post("/api/auth/login").send({
+					email: "login@example.com",
+					password: "password123",
+				});
+				expect(res.statusCode).toEqual(200);
+				expect(res.body).toHaveProperty("token");
+				expect(res.headers["set-cookie"]).toBeUndefined();
 			});
-			expect(res.statusCode).toEqual(200);
-			expect(res.body).toHaveProperty("token");
+		});
+
+		describe("Desktop Client", () => {
+			it("should return a JWT in an HttpOnly cookie", async () => {
+				const res = await request(app)
+					.post("/api/auth/login")
+					.set("X-Client-Type", "desktop")
+					.send({
+						email: "login@example.com",
+						password: "password123",
+					});
+				expect(res.statusCode).toEqual(200);
+				expect(res.body).not.toHaveProperty("token");
+				expect(res.headers["set-cookie"]).toBeDefined();
+				expect(res.headers["set-cookie"]).toContain("jwt=");
+				expect(res.headers["set-cookie"]).toContain("HttpOnly");
+			});
 		});
 
 		it("should return a 400 error for invalid credentials", async () => {
-			const res = await request(app).post("/api/auth/login/jwt").send({
+			const res = await request(app).post("/api/auth/login").send({
 				email: "login@example.com",
 				password: "wrongpassword",
 			});
