@@ -156,6 +156,3 @@ apps/backend/src/tests/
 apps/backend/src/tests/setup.js
 
 # Ignore purpose.txt files from architectural refactor
-apps/backend/src/services/purpose.txt
-apps/backend/src/config/purpose.txt
-apps/backend/src/features/purpose.txt
