@@ -1,3 +1,0 @@
-This directory contains application-level configuration and initialization files.
-
-This includes setup for foundational, cross-cutting concerns like the database connection, authentication strategies, and session management.

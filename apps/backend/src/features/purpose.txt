@@ -1,3 +1,0 @@
-This directory contains the core business logic of the application, organized by feature.
-
-Each subdirectory represents a self-contained "vertical slice" of functionality, such as authentication, user management, or forms processing. This structure is designed to be highly modular and scalable.

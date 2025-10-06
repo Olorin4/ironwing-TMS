@@ -1,10 +1,12 @@
 # Iron Wing TMS - Developer Guide
 
+
 ## **1. Overview**
 
 This document outlines the architectural decisions, technology stack, and development strategy for the Iron Wing TMS project. The project is structured as a **monorepo** to manage the backend, desktop, and mobile applications within a single repository.
 
 The backend is a **Headless API** using a **Feature-Based** directory structure. This approach supports a decoupled frontend architecture (Electron for desktop, React Native for mobile) while maximizing code organization and scalability.
+
 
 ## **2. Monorepo Structure**
 
@@ -20,6 +22,7 @@ The main applications are located in the `apps/` directory:
 -   `apps/mobile`: The React Native mobile application.
 
 Shared packages are in the `packages/` directory.
+
 
 ## **3. Tech Stack**
 
@@ -54,6 +57,7 @@ Shared packages are in the `packages/` directory.
 -   **Containerization**: **Docker**.
 -   **CI/CD**: **GitHub Actions**.
 -   **Testing**: **Jest**, **React Testing Library**, and **Supertest**.
+
 
 ## **4. Architecture**
 
@@ -113,6 +117,7 @@ The backend follows a **Feature-Based** architecture ("Vertical Slicing"), not a
 +---------------------------------------------------+
 ```
 
+
 ## **5. Development Roadmap**
 
 ### **Phase 0: Environment Setup (ETA: 2 Weeks)**
@@ -144,6 +149,7 @@ The backend follows a **Feature-Based** architecture ("Vertical Slicing"), not a
 
 ### **Phase 5: Future Enhancements (ETA: TBD)**
 - ELD Integration
+
 
 ## **6. Testing Strategy in a Monorepo**
 

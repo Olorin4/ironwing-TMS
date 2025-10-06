@@ -140,8 +140,8 @@ dist
 **/purpose.txt
 
 
-# Ignore developmer guide
-DEVELOPMER_GUIDE.md
+# Ignore developer guide
+DEVELOPER_GUIDE.md
 
 ironwing-TMS.code-workspace
 
@@ -154,3 +154,8 @@ ironwing-TMS.code-workspace
 # Test folder
 apps/backend/src/tests/
 apps/backend/src/tests/setup.js
+
+# Ignore purpose.txt files from architectural refactor
+apps/backend/src/services/purpose.txt
+apps/backend/src/config/purpose.txt
+apps/backend/src/features/purpose.txt
