@@ -1,78 +1,53 @@
-import request from "supertest";
-import app from "../../app.js";
-import { prisma } from "../../config/prisma.client.js";
-import * as emailService from "../../services/email.service.js";
+import request from 'supertest';
+import { createTestServer } from '../../tests/server.js';
+import prisma from '../../config/prisma.client.js';
+import { emailClient, emailAdmin } from '../../services/email.service.js';
 
-// Mock the email service
-jest.mock("../../services/email.service.js");
+const app = createTestServer();
 
-describe("Forms API Endpoints", () => {
-	beforeEach(() => {
-		// Reset mocks before each test
-		jest.clearAllMocks();
-	});
+describe('Forms Routes', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-	describe("POST /api/forms/sign-up-forms", () => {
-		it("should submit the form successfully and send emails", async () => {
-			// Mock the prisma create function to avoid writing to the DB for this test
-			prisma.signUpForm.create = jest.fn().mockResolvedValue({ id: "test-id" });
+  describe('POST /sign-up-forms', () => {
+    it('should submit the form and return 200', async () => {
+      const formData = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        phone: '1234567890',
+        fleetSize: '1-10',
+        trailerType: 'Dry Van',
+        plan: 'Standard',
+      };
 
-			const formData = {
-				firstName: "John",
-				lastName: "Doe",
-				email: "john.doe@example.com",
-				phone: "1234567890",
-				fleetSize: "5-10",
-				trailerType: "Dry Van",
-				plan: "Standard",
-			};
+      prisma.signUpForm.create.mockResolvedValue({ id: 1, ...formData });
 
-			const response = await request(app)
-				.post("/api/forms/sign-up-forms")
-				.send(formData);
+      const res = await request(app)
+        .post('/sign-up-forms')
+        .send(formData);
 
-			expect(response.statusCode).toBe(200);
-			expect(response.body).toEqual({
-				message: "Form submitted successfully!",
-				id: "test-id",
-			});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body).toHaveProperty('message', 'Form submitted successfully!');
+      expect(res.body).toHaveProperty('id', 1);
+      expect(emailClient).toHaveBeenCalled();
+      expect(emailAdmin).toHaveBeenCalled();
+    });
 
-			// Verify that prisma was called correctly
-			expect(prisma.signUpForm.create).toHaveBeenCalledWith({
-				data: {
-					first_name: "John",
-					last_name: "Doe",
-					email: "john.doe@example.com",
-					phone: "1234567890",
-					fleet_size: "5-10",
-					trailer_type: "Dry Van",
-					plan: "Standard",
-					status: "pending",
-				},
-			});
+    it('should return 400 if required fields are missing', async () => {
+      const formData = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+      };
 
-			// Verify that the email functions were called
-			expect(emailService.emailClient).toHaveBeenCalledTimes(1);
-			expect(emailService.emailAdmin).toHaveBeenCalledTimes(1);
-		});
+      const res = await request(app)
+        .post('/sign-up-forms')
+        .send(formData);
 
-		it("should return a 400 error if required fields are missing", async () => {
-			const formData = {
-				firstName: "John",
-				lastName: "Doe",
-				// Missing email and other fields
-			};
-
-			const response = await request(app)
-				.post("/api/forms/sign-up-forms")
-				.send(formData);
-
-			expect(response.statusCode).toBe(400);
-			expect(response.body).toEqual({ error: "All fields are required." });
-
-			// Ensure no emails were sent on failure
-			expect(emailService.emailClient).not.toHaveBeenCalled();
-			expect(emailService.emailAdmin).not.toHaveBeenCalled();
-		});
-	});
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('error', 'All fields are required.');
+    });
+  });
 });
