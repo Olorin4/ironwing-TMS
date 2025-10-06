@@ -140,9 +140,8 @@ dist
 **/purpose.txt
 
 
-# Ignore development plan
-DEVELOPMENT_PLAN.md
-ARCHITECTURE.md
+# Ignore developmer guide
+DEVELOPMER_GUIDE.md
 
 ironwing-TMS.code-workspace
 
