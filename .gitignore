@@ -154,3 +154,4 @@ ironwing-TMS.code-workspace
 
 # Test folder
 apps/backend/src/tests/
+apps/backend/src/tests/setup.js
