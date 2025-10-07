@@ -23,7 +23,7 @@ We follow the testing pyramid model to ensure a balanced and effective testing p
 
 ## 4. Test Organization
 
-Tests are co-located with the source code in `__tests__` directories. E2E tests are located in the `cypress` directory.
+Tests are co-located with the source code in `__tests__` directories. For example, the `Button` component in `packages/ui-components/src/` has its tests in `packages/ui-components/src/__tests__/`. E2E tests are located in the `cypress` directory.
 
 ## 5. Running Tests
 
@@ -40,7 +40,23 @@ npm test
 To run E2E tests, use the following command:
 
 ```bash
-npm run cypress:run
+npm run cy:run
+```
+
+### API Contract Tests
+
+To run the API contract tests, use the following command:
+
+```bash
+npm run test:contract
+```
+
+### Security Tests
+
+To run the security tests, use the following command:
+
+```bash
+npm run test:security
 ```
 
 ## 6. CI/CD Integration

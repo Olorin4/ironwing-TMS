@@ -22,17 +22,8 @@
         "cy:open": "cypress open",
         "cy:run": "cypress run",
         "precy:run": "npm run dev:backend",
-        "test:contract": "node apps/backend/run-dredd.cjs"
-    },
-    "jest": {
-        "coverageThreshold": {
-            "global": {
-                "branches": 80,
-                "functions": 80,
-                "lines": 80,
-                "statements": 80
-            }
-        }
+        "test:contract": "node apps/backend/run-dredd.cjs",
+        "test:security": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config apps/backend/jest.security.config.cjs"
     },
     "keywords": [],
     "dependencies": {
@@ -55,6 +46,7 @@
         "babel-loader": "^9.2.1",
         "concurrently": "^9.1.2",
         "cypress": "^15.3.0",
+        "dotenv-cli": "^7.4.2",
         "eslint": "^9.21.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-import-resolver-node": "^0.3.9",

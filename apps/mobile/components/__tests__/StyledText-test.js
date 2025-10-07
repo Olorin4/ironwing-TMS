@@ -20,7 +20,7 @@ describe('MonoText Component', () => {
       );
     });
     const { style } = tree.toJSON().props;
-    expect(style).toEqual(expect.arrayContaining([{ color: 'red' }]));
+    expect(style).toEqual(expect.arrayContaining([{"color": "#000"}, [{"color": "red"}, {"fontFamily": "SpaceMono"}]]));
   });
 
   it('handles empty children', () => {

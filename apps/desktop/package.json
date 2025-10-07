@@ -8,7 +8,7 @@
         "electron": "wait-on http://localhost:5173 && electron apps/desktop/electron/main.js",
         "build": "vite build && electron-builder",
         "start": "electron apps/desktop/electron/main.js",
-        "test": "jest"
+        "test": "jest --config jest.config.cjs"
     },
     "dependencies": {
         "electron-is-dev": "^3.0.1",
