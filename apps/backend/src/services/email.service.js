@@ -4,7 +4,6 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv-flow";
 import signature from "../assets/signature.js";
 
-dotenv.config();
 
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,

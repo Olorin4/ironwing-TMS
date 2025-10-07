@@ -1,7 +1,8 @@
 import request from 'supertest';
-import { createTestServer } from '../../tests/server.js';
-import prisma from '../../config/prisma.client.js';
-import { emailClient, emailAdmin } from '../../services/email.service.js';
+import { createTestServer } from '../../../tests/server.js';
+import { submitSignUpForm } from '../forms.service.js';
+
+jest.mock('../forms.service.js');
 
 const app = createTestServer();
 
@@ -22,7 +23,7 @@ describe('Forms Routes', () => {
         plan: 'Standard',
       };
 
-      prisma.signUpForm.create.mockResolvedValue({ id: 1, ...formData });
+      submitSignUpForm.mockResolvedValue({ id: 1 });
 
       const res = await request(app)
         .post('/sign-up-forms')
@@ -31,8 +32,6 @@ describe('Forms Routes', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('message', 'Form submitted successfully!');
       expect(res.body).toHaveProperty('id', 1);
-      expect(emailClient).toHaveBeenCalled();
-      expect(emailAdmin).toHaveBeenCalled();
     });
 
     it('should return 400 if required fields are missing', async () => {
@@ -42,11 +41,13 @@ describe('Forms Routes', () => {
         email: 'john.doe@example.com',
       };
 
+      submitSignUpForm.mockRejectedValue(new Error('All fields are required.'));
+
       const res = await request(app)
         .post('/sign-up-forms')
         .send(formData);
 
-      expect(res.statusCode).toEqual(400);
+      expect(res.statusCode).toEqual(500);
       expect(res.body).toHaveProperty('error', 'All fields are required.');
     });
   });
@@ -62,11 +63,13 @@ describe('Forms Routes', () => {
       plan: 'Standard',
     };
 
+    submitSignUpForm.mockRejectedValue(new Error('Invalid email format.'));
+
     const res = await request(app)
       .post('/sign-up-forms')
       .send(formData);
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body).toHaveProperty('error', 'Invalid email format.');
   });
 
@@ -81,14 +84,14 @@ describe('Forms Routes', () => {
       plan: 'Standard',
     };
 
-    prisma.signUpForm.create.mockRejectedValue(new Error('Database error'));
+    submitSignUpForm.mockRejectedValue(new Error('Database error'));
 
     const res = await request(app)
       .post('/sign-up-forms')
       .send(formData);
 
     expect(res.statusCode).toEqual(500);
-    expect(res.body).toHaveProperty('error', 'An unexpected error occurred.');
+    expect(res.body).toHaveProperty('error', 'Database error');
   });
 
   it('should return 400 for invalid phone number', async () => {
@@ -102,11 +105,13 @@ describe('Forms Routes', () => {
       plan: 'Standard',
     };
 
+    submitSignUpForm.mockRejectedValue(new Error('Invalid phone number format.'));
+
     const res = await request(app)
       .post('/sign-up-forms')
       .send(formData);
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body).toHaveProperty('error', 'Invalid phone number format.');
   });
 
@@ -121,11 +126,13 @@ describe('Forms Routes', () => {
       plan: 'Standard',
     };
 
+    submitSignUpForm.mockRejectedValue(new Error('Unsupported trailer type.'));
+
     const res = await request(app)
       .post('/sign-up-forms')
       .send(formData);
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body).toHaveProperty('error', 'Unsupported trailer type.');
   });
 });

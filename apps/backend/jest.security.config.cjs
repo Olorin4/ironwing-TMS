@@ -1,7 +1,7 @@
 module.exports = {
-  preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/*.security.test.js'],
+  setupFilesAfterEnv: ['./security/jest.setup.js'],
   reporters: [
     'default',
     [

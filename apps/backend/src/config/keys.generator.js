@@ -1,8 +1,11 @@
 import fs from "fs";
-import path from "path";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 import { generateKeyPairSync } from "crypto";
 
-const keysDir = path.resolve("./src/config/keys");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const keysDir = path.resolve(__dirname, "keys");
 
 // Ensure the "keys" directory exists, if not, create it
 if (!fs.existsSync(keysDir)) fs.mkdirSync(keysDir);

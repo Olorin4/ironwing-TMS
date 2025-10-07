@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../../app';
+import app from '../src/app.js';
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 
@@ -30,8 +30,12 @@ describe('Authorization Security', () => {
   });
 
   afterAll(async () => {
-    await prisma.user.delete({ where: { id: adminUser.id } });
-    await prisma.user.delete({ where: { id: regularUser.id } });
+    if (adminUser) {
+      await prisma.user.delete({ where: { id: adminUser.id } });
+    }
+    if (regularUser) {
+      await prisma.user.delete({ where: { id: regularUser.id } });
+    }
     await prisma.$disconnect();
   });
 
