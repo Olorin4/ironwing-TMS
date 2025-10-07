@@ -1,0 +1,24 @@
+name: Security Testing
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm ci
+    - name: Run dependency audit
+      run: npm audit --audit-level=high
+    - name: Run ESLint security scan
+      run: npm run lint

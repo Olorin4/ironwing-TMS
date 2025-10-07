@@ -5,7 +5,12 @@ import { registerUserService, validateLoginService } from "./auth.service.js";
 export async function registerUser(req, res) {
     try {
         const { email, password, role, companyId } = req.body;
-        const newUser = await registerUserService({ email, password, role, companyId });
+        const newUser = await registerUserService({
+            email,
+            password,
+            role,
+            companyId,
+        });
         res.status(201).json({
             message: "User created successfully",
             userId: newUser.id,

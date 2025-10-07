@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { act, create } from 'react-test-renderer';
+import * as React from "react";
+import { act, create } from "react-test-renderer";
 
-import { MonoText } from '../StyledText';
+import { MonoText } from "../StyledText";
 
 it(`renders correctly`, () => {
-  let tree;
-  act(() => {
-    tree = create(<MonoText>Snapshot test!</MonoText>);
-  });
+    let tree;
+    act(() => {
+        tree = create(<MonoText>Snapshot test!</MonoText>);
+    });
 
-  expect(tree.toJSON()).toMatchSnapshot();
+    expect(tree.toJSON()).toMatchSnapshot();
 });

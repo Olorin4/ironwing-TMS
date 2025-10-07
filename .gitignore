@@ -136,23 +136,9 @@ dist
 .pnp.*
 
 
-# Ignore purpose.txt files from architectural refactor
-**/purpose.txt
-
-
-# Ignore developer guide
-DEVELOPER_GUIDE.md
-
 ironwing-TMS.code-workspace
 
 
 # Ignore local environment variables
 .env
 .env.test
-
-
-# Test folder
-apps/backend/src/tests/
-apps/backend/src/tests/setup.js
-
-# Ignore purpose.txt files from architectural refactor

@@ -1,11 +1,6 @@
 import express from "express";
 import passport from "../../config/passport.js";
-import {
-    registerUser,
-    login,
-    logout,
-    getProfile,
-} from "./auth.controller.js";
+import { registerUser, login, logout, getProfile } from "./auth.controller.js";
 
 const authRouter = express.Router();
 
