@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { createTestServer } from '../../tests/server.js';
+import { createTestServer } from '../../__tests__/server.js';
 import prisma from '../../config/prisma.client.js';
 import { emailClient, emailAdmin } from '../../services/email.service.js';
 

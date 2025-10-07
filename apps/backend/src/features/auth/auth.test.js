@@ -1,6 +1,8 @@
 import request from 'supertest';
-import { createTestServer } from '../../tests/server.js';
-import prisma from '../../config/prisma.client.js';
+import { createTestServer } from '../../__tests__/server.js';
+import { registerUserService } from './auth.service.js';
+
+jest.mock('./auth.service.js');
 
 const app = createTestServer();
 
@@ -18,7 +20,6 @@ describe('Auth Routes', () => {
         companyId: 1,
       };
 
-      const { registerUserService } = await import('./auth.service.js');
       registerUserService.mockResolvedValue({ id: 1, ...userData });
 
       const res = await request(app)
@@ -38,7 +39,6 @@ describe('Auth Routes', () => {
         companyId: 1,
       };
 
-      const { registerUserService } = await import('./auth.service.js');
       registerUserService.mockRejectedValue(new Error('User already exists'));
 
       const res = await request(app)
