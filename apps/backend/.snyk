@@ -1,0 +1,5 @@
+# Snyk policy file
+version: v1.22.1
+ignore:
+  - "snyk-.*"
+patch: {}

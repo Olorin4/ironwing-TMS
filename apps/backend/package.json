@@ -12,7 +12,12 @@
         "lint": "eslint src --ext .js",
         "lint:fix": "eslint src --ext .js --fix",
         "clean": "rm -rf dist",
-        "build": "babel src -d dist"
+        "build": "babel src -d dist",
+        "test:contract": "prisma generate && node run-dredd.cjs",
+        "test:perf": "k6 run performance/auth.test.js --out json=auth-results.json && k6 run performance/forms.test.js --out json=forms-results.json",
+        "test:perf:auth": "k6 run performance/auth.test.js --out json=auth-results.json",
+        "test:perf:forms": "k6 run performance/forms.test.js --out json=forms-results.json",
+        "test:security": "jest --config jest.security.config.cjs"
     },
     "keywords": [],
     "author": "",
@@ -38,8 +43,15 @@
         "redis": "^5.8.3"
     },
     "devDependencies": {
+        "auditjs": "^4.0.47",
+        "bcrypt": "^6.0.0",
+        "dredd": "^14.1.0",
+        "jest-html-reporters": "^3.1.7",
+        "k6": "^0.0.0",
         "nodemon": "^3.0.1",
         "prisma": "^6.4.1",
-        "supertest": "^7.1.4"
+        "snyk": "^1.1299.1",
+        "supertest": "^7.1.4",
+        "ts-jest": "^29.4.4"
     }
 }

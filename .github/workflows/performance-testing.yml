@@ -1,0 +1,47 @@
+name: Performance Testing
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  k6-performance-test:
+    name: Run k6 Performance Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./apps/backend
+
+      - name: Start backend server
+        run: npm start &
+        working-directory: ./apps/backend
+
+      - name: Wait for server to start
+        run: sleep 10
+
+      - name: Setup k6
+        uses: grafana/k6-action@v0.3.1
+
+      - name: Run performance tests
+        run: npm run test:perf
+        working-directory: ./apps/backend
+
+      - name: Upload performance test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results
+          path: |
+            apps/backend/auth-results.json
+            apps/backend/forms-results.json

@@ -1,0 +1,26 @@
+# Dredd configuration file
+
+# The command to start your API backend server
+# This command is run from the root of the monorepo.
+server: 'npm run dev:backend'
+
+# The URL of your API backend
+endpoint: 'http://localhost:3000'
+
+# The path to your API description document (relative to this file)
+api-descriptions:
+  - openapi.yaml
+
+# Language for hooks
+language: nodejs
+
+# Path to hooks files (relative to this file)
+hookfiles:
+  - 'dredd-hooks.cjs'
+
+# Set to true to fail tests when API description is invalid
+check-api-description: true
+
+# Set a custom header for all requests
+header:
+  - 'X-Client-Type: dredd'
