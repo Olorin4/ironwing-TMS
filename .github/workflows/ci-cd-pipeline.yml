@@ -6,7 +6,35 @@ on:
             - master
 
 jobs:
+    e2e-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Read Node.js version from .nvmrc
+              run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Build desktop app
+              run: npm run build --workspace=apps/desktop
+
+            - name: Run E2E tests
+              uses: cypress-io/github-action@v6
+              with:
+                start: npm run dev:desktop
+                wait-on: 'http://localhost:5173'
+
     build-and-deploy-backend:
+        needs: e2e-tests
         if: github.actor == 'Olorin4'
         runs-on: ubuntu-latest
 
