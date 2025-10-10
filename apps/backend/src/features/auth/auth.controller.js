@@ -58,10 +58,7 @@ export async function login(req, res) {
 // For the desktop client, logout by clearing the HttpOnly cookie.
 // Mobile clients handle logout by deleting the token from their secure storage.
 export async function logout(req, res) {
-    res.cookie("jwt", "", {
-        httpOnly: true,
-        expires: new Date(0),
-    });
+    res.cookie("jwt", "", { httpOnly: true, expires: new Date(0) });
     res.status(200).json({ message: "Logged out successfully" });
 }
 

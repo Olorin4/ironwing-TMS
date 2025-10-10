@@ -25,7 +25,7 @@ describe("Forms Routes", () => {
             prisma.signUpForm.create.mockResolvedValue({ id: 1, ...formData });
 
             const res = await request(app)
-                .post("/sign-up-forms")
+                .post("/api/forms/sign-up-forms")
                 .send(formData);
 
             expect(res.statusCode).toEqual(200);
@@ -46,7 +46,7 @@ describe("Forms Routes", () => {
             };
 
             const res = await request(app)
-                .post("/sign-up-forms")
+                .post("/api/forms/sign-up-forms")
                 .send(formData);
 
             expect(res.statusCode).toEqual(400);

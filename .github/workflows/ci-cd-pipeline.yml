@@ -75,7 +75,7 @@ jobs:
 
             - name: Deploy Backend to Server
               env:
-                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_HETZNER_SERVER_KEY }}
+                  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_AWS_SERVER_KEY }}
                   SERVER_IP: ${{ secrets.SERVER_IP }}
               run: |
                   echo -e "${SSH_PRIVATE_KEY//_/\\n}" > private_key.pem
