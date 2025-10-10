@@ -5,7 +5,7 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             // implement node event listeners here
         },
-        specPattern: "apps/**/*.cy.{js,jsx,ts,tsx}",
+        specPattern: "apps/**/src/**/*.cy.{js,jsx,ts,tsx}",
         supportFile: "cypress/support/e2e.js",
         fixturesFolder: "cypress/fixtures",
         screenshotsFolder: "cypress/screenshots",
