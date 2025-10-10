@@ -6,7 +6,7 @@
     "main": "electron/main.js",
     "scripts": {
         "dev": "concurrently \"vite\" \"npm run electron\"",
-        "electron": "wait-on http://localhost:5173 && electron apps/desktop/electron/main.js",
+        "electron": "wait-on http://localhost:5173 && electron --no-sandbox apps/desktop/electron/main.js",
         "build": "vite build && electron-builder",
         "start": "electron apps/desktop/electron/main.js",
         "test": "jest"
