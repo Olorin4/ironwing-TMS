@@ -3,6 +3,7 @@
     "version": "0.5.1",
     "private": true,
     "type": "module",
+    "main": "electron/main.js",
     "scripts": {
         "dev": "concurrently \"vite\" \"npm run electron\"",
         "electron": "wait-on http://localhost:5173 && electron apps/desktop/electron/main.js",
