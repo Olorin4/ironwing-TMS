@@ -8,8 +8,10 @@ const app = createTestServer();
 
 describe("/api/auth/profile route", () => {
     const testUser = { id: 9999, email: "test@example.com", password: "$2a$10$testhash", role: "ADMIN" };
-    beforeAll(async () => { await prisma.user.create({ data: testUser }); });
-    afterAll(async () => { await prisma.user.delete({ where: { id: testUser.id } }); });
+    beforeAll(async () => {
+        // Mock the prisma client to return the test user
+        prisma.user.findUnique.mockResolvedValue(testUser);
+    });
 
     it("should return 401 if no token is provided", async () => {
         const res = await request(app).get("/api/auth/profile");
