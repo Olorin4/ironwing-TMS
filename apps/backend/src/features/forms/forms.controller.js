@@ -48,7 +48,10 @@ export async function submitForm(req, res) {
         });
         console.log("✅ Inserted Sign-Up Form ID:", result.id);
 
-        res.status(200).json({message: "Form submitted successfully!", id: result.id});
+        res.status(200).json({
+            message: "Form submitted successfully!",
+            id: result.id,
+        });
     } catch (error) {
         console.error("❌ Prisma Error:", error);
         res.status(500).json({ error: error.message });
@@ -94,7 +97,9 @@ export async function contactForm(req, res) {
     console.log("📩 Contact Form Submission:", req.body);
 
     try {
-        const result = await prisma.contactSubmission.create({data: req.body,});
+        const result = await prisma.contactSubmission.create({
+            data: req.body,
+        });
         console.log("✅ Contact Form Inserted ID:", result.id);
         res.status(200).json({
             message: "Contact form submitted successfully!",

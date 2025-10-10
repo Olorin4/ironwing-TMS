@@ -2,7 +2,7 @@ import { AbilityBuilder, Ability } from "@casl/ability";
 
 // Defines how to build abilities for a given user
 export function defineAbilitiesFor(user) {
-    const { can, cannot, build } = new AbilityBuilder(Ability);
+    const { can, build } = new AbilityBuilder(Ability);
 
     if (!user) {
         // Abilities for a guest user (not logged in)

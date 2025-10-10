@@ -5,7 +5,9 @@ export async function registerUserService(data) {
     const { email, password, role, companyId } = data;
 
     if (!email || !password || !role || !companyId) {
-        throw new Error("All fields are required: email, password, role, companyId");
+        throw new Error(
+            "All fields are required: email, password, role, companyId"
+        );
     }
 
     console.log(`Attempting to create user: ${email}`);
@@ -27,9 +29,13 @@ export async function registerUserService(data) {
 
     // Create profile based on role
     if (role === "driver") {
-        await prisma.driver.create({data: { user_id: newUser.id, company_id: companyId },});
+        await prisma.driver.create({
+            data: { user_id: newUser.id, company_id: companyId },
+        });
     } else if (role === "dispatcher") {
-        await prisma.dispatcher.create({data: { user_id: newUser.id, company_id: companyId },});
+        await prisma.dispatcher.create({
+            data: { user_id: newUser.id, company_id: companyId },
+        });
     }
 
     console.log("User created successfully:", newUser);

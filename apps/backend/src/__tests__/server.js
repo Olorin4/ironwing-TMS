@@ -31,7 +31,7 @@ export function createTestServer() {
     // Fallback Route for Not Found
     app.use((req, res) => res.status(404).json({ error: "Not Found" }));
     // Error Handling Middleware
-    app.use((err, req, res, next) => {
+    app.use((err, req, res) => {
         console.error(err.stack);
         res.status(500).json({ error: "Internal Server Error" });
     });

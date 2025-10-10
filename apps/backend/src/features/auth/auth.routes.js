@@ -12,6 +12,10 @@ authRouter.post("/login", login);
 authRouter.post("/logout", logout);
 
 // A single protected route for both clients
-authRouter.get("/profile", passport.authenticate("jwt", { session: false }), getProfile);
+authRouter.get(
+    "/profile",
+    passport.authenticate("jwt", { session: false }),
+    getProfile
+);
 
 export default authRouter;

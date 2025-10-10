@@ -21,6 +21,7 @@ export function useThemeColor(
     colorName: keyof typeof Colors.light & keyof typeof Colors.dark
 ) {
     const theme = useColorScheme() ?? "light";
+    // eslint-disable-next-line security/detect-object-injection
     const colorFromProps = props[theme];
 
     if (colorFromProps) {

@@ -7,7 +7,12 @@ import { prisma } from "../../../config/prisma.client.js";
 const app = createTestServer();
 
 describe("/api/auth/profile route", () => {
-    const testUser = { id: 9999, email: "test@example.com", password: "$2a$10$testhash", role: "ADMIN" };
+    const testUser = {
+        id: 9999,
+        email: "test@example.com",
+        password: "$2a$10$testhash",
+        role: "ADMIN",
+    };
     beforeAll(async () => {
         // Mock the prisma client to return the test user
         prisma.user.findUnique.mockResolvedValue(testUser);
@@ -19,12 +24,20 @@ describe("/api/auth/profile route", () => {
     });
 
     it("should return user profile if valid JWT is provided", async () => {
-        const token = jwt.sign({ id: testUser.id, email: testUser.email }, privateKey, { algorithm: "RS256", expiresIn: "1h" });
+        const token = jwt.sign(
+            { id: testUser.id, email: testUser.email },
+            privateKey,
+            { algorithm: "RS256", expiresIn: "1h" }
+        );
         const res = await request(app)
             .get("/api/auth/profile")
             .set("Authorization", `Bearer ${token}`);
         expect(res.statusCode).toBe(200);
         expect(res.body).toHaveProperty("user");
-        expect(res.body.user).toMatchObject({ id: testUser.id, email: testUser.email, role: testUser.role });
+        expect(res.body.user).toMatchObject({
+            id: testUser.id,
+            email: testUser.email,
+            role: testUser.role,
+        });
     });
 });
