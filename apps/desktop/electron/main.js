@@ -2,8 +2,8 @@
 Loads the Vite development server in dev mode and the production build in 
 production mode. */
 
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
+import { app, BrowserWindow } from "electron";
+import path from "path";
 
 let mainWindow;
 
