@@ -1,9 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export function Button({ title, onClick }) {
+export function Button({ title, onClick, type = "button", id }) {
     return (
         <button
+            id={id}
+            type={type}
             onClick={onClick}
             style={{
                 padding: "10px 20px",
@@ -21,4 +23,6 @@ export function Button({ title, onClick }) {
 Button.propTypes = {
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
+    type: PropTypes.string,
+    id: PropTypes.string,
 };

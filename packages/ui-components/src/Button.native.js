@@ -2,9 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-export function Button({ title, onPress }) {
+export function Button({ title, onClick }) {
     return (
-        <TouchableOpacity style={styles.button} onPress={onPress}>
+        <TouchableOpacity style={styles.button} onPress={onClick}>
             <Text style={styles.text}>{title}</Text>
         </TouchableOpacity>
     );
@@ -12,7 +12,7 @@ export function Button({ title, onPress }) {
 
 Button.propTypes = {
     title: PropTypes.string.isRequired,
-    onPress: PropTypes.func.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

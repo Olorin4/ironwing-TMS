@@ -9,7 +9,7 @@
         "packages/*"
     ],
     "scripts": {
-        "dev:backend": "npm run dev --workspace=apps/backend",
+        "dev:backend": "npm run start:dev --workspace=apps/backend",
         "dev:desktop": "npm run dev --workspace=apps/desktop",
         "dev:mobile": "npm run start --workspace=apps/mobile",
         "build": "npm run build --workspaces",
@@ -17,7 +17,11 @@
         "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
         "format": "prettier --write .",
         "clean": "rm -rf dist",
-        "test": "npm run test --workspaces --if-present"
+        "test": "npm run test --workspaces --if-present",
+        "test:e2e": "npm run kill-port && npm run test:e2e:setup && npm run start:servers & wait-on http://localhost:5173 && npx cypress run && npm run kill-port",
+        "test:e2e:setup": "npm run db:seed:test --workspace=apps/backend",
+        "start:servers": "NODE_ENV=development npm-run-all -p dev:backend dev:desktop",
+        "kill-port": "lsof -t -i:5173 | xargs kill -9 || true"
     },
     "keywords": [],
     "dependencies": {

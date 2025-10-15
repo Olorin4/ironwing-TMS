@@ -43,11 +43,21 @@ export async function registerUserService(data) {
 }
 
 export async function validateLoginService({ email, password }) {
+    
+    console.log(`Validating login for email: ${email}`);
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
+        console.error(`Login failed: User not found for email ${email}`);
         throw new Error("Invalid credentials");
     }
 
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        console.error(`Login failed: Invalid password for email ${email}`);
+        throw new Error("Invalid credentials");
+    }
+
+    console.log(`Login successful for user: ${email}`);
     return user;
 }

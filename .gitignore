@@ -1,9 +1,3 @@
-.env*
-.vscode
-
-keys
-*.pem
-
 # Logs
 logs
 *.log
@@ -137,8 +131,14 @@ dist
 
 
 ironwing-TMS.code-workspace
+.vscode
 
-
-# Ignore local environment variables
+# Ignore local environment variables and secrets
 .env
 .env.test
+.env*
+keys
+*.pem
+
+__tests__
+

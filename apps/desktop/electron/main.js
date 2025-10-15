@@ -11,6 +11,12 @@ const __dirname = path.dirname(__filename);
 
 let mainWindow;
 
+app.on('web-contents-created', (event, contents) => {
+    contents.on('console-message', (e, level, message, line, sourceId) => {
+        console.log(message);
+    });
+});
+
 app.whenReady().then(() => {
     mainWindow = new BrowserWindow({
         width: 1280,

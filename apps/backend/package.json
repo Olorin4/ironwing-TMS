@@ -5,14 +5,19 @@
     "type": "module",
     "main": "app.js",
     "scripts": {
-        "dev": "NODE_ENV=development nodemon src/app.js",
-        "start": "NODE_ENV=production node src/app.js",
-        "start:prod": "NODE_ENV=production node src/app.js",
-        "test": "jest --passWithNoTests",
+        "start": "node src/app.js",
+        "start:dev": "dotenv -e .env.development -- nodemon src/app.js",
+        "start:prod": "dotenv -e .env.production -- node src/app.js",
+        "start:test:local": "dotenv -e .env.test -- node src/app.js",
+        "test": "dotenv -e .env.test -- jest --passWithNoTests",
         "lint": "eslint src --ext .js",
         "lint:fix": "eslint src --ext .js --fix",
-        "clean": "rm -rf dist",
-        "build": "babel src -d dist"
+        "build": "babel src -d dist",
+        "db:seed:test": "dotenv -e .env.test -- node __tests__/seed-test-db.js",
+        "db:seed:test:user": "dotenv -e .env.test -- node __tests__/seed-test-user.js",
+        "prisma:generate": "prisma generate",
+        "db:migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
+        "db:migrate:prod": "dotenv -e .env.production -- prisma migrate deploy"
     },
     "keywords": [],
     "author": "",
@@ -38,6 +43,7 @@
         "redis": "^5.8.3"
     },
     "devDependencies": {
+        "dotenv-cli": "^10.0.0",
         "nodemon": "^3.0.1",
         "prisma": "^6.4.1",
         "supertest": "^7.1.4"

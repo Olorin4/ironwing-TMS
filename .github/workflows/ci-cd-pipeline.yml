@@ -30,8 +30,8 @@ jobs:
             - name: Run E2E tests
               uses: cypress-io/github-action@v6
               with:
-                start: npm run dev:desktop
-                wait-on: 'http://localhost:5173'
+                start: npm run start:test:local --workspace=apps/backend
+                wait-on: 'http://localhost:3000'
 
     build-and-deploy-backend:
         needs: e2e-tests
@@ -56,21 +56,21 @@ jobs:
             - name: Run backend tests
               run: npm run test --workspace=apps/backend -- --passWithNoTests
 
-            - name: Generate .env file
+            - name: Generate production .env file
               run: |
-                  echo "NODE_ENV=production" > apps/backend/.env
-                  echo "PORT=${{ secrets.PORT }}" >> apps/backend/.env
-                  echo "DB_URL=${{ secrets.DB_URL }}" >> apps/backend/.env
-                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> apps/backend/.env
-                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> apps/backend/.env
-                  echo "DB_USER=${{ secrets.DB_USER }}" >> apps/backend/.env
-                  echo "DB_PASS=${{ secrets.DB_PASS }}" >> apps/backend/.env
-                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> apps/backend/.env
-                  echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> apps/backend/.env
-                  echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> apps/backend/.env
-                  echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> apps/backend/.env
-                  echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> apps/backend/.env
-                  echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> apps/backend/.env
+                  echo "NODE_ENV=production" > apps/backend/.env.production
+                  echo "PORT=${{ secrets.PORT }}" >> apps/backend/.env.production
+                  echo "DB_URL=${{ secrets.DB_URL }}" >> apps/backend/.env.production
+                  echo "DB_NAME=${{ secrets.DB_NAME }}" >> apps/backend/.env.production
+                  echo "DB_HOST=${{ secrets.DB_HOST }}" >> apps/backend/.env.production
+                  echo "DB_USER=${{ secrets.DB_USER }}" >> apps/backend/.env.production
+                  echo "DB_PASS=${{ secrets.DB_PASS }}" >> apps/backend/.env.production
+                  echo "DB_PORT=${{ secrets.DB_PORT }}" >> apps/backend/.env.production
+                  echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> apps/backend/.env.production
+                  echo "EMAIL_USER=${{ secrets.EMAIL_USER }}" >> apps/backend/.env.production
+                  echo "EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> apps/backend/.env.production
+                  echo "EMAIL_FROM=${{ secrets.EMAIL_FROM }}" >> apps/backend/.env.production
+                  echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> apps/backend/.env.production
 
             - name: Deploy Backend to Server
               env:
@@ -92,10 +92,11 @@ jobs:
                     npm install --omit=dev
 
                     echo "🚀 Running Prisma Migrations..."
-                    npx prisma migrate deploy
+                    npm run db:migrate:prod
+
                     npx prisma generate
 
-                    pm2 restart ironwing-backend || pm2 start src/app.js --name ironwing-backend
+                    pm2 restart ironwing-backend || pm2 start npm -- start --name ironwing-backend
                     pm2 save
 
                     echo "✅ Backend deployment completed successfully."
