@@ -7,7 +7,7 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { defineAbilities } from "./features/auth/auth.middleware.js";
 
-dotenv.config();
+if (!process.env.DB_URL) {dotenv.config();}
 console.log("Database URL:", process.env.DB_URL);
 const app = express();
 const PORT = process.env.PORT || 3000;
