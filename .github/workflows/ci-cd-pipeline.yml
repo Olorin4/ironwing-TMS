@@ -27,6 +27,19 @@ jobs:
             - name: Build desktop app
               run: npm run build --workspace=apps/desktop
 
+            - name: Setup test database
+              run: |
+                sudo /etc/init.d/postgresql start
+                sudo -u postgres psql -c "CREATE DATABASE tms_db_test;"
+                sudo -u postgres psql -c "CREATE USER tester WITH PASSWORD 'testpassword';"
+                sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE tms_db_test TO tester;"
+
+            - name: Create .env.test file
+              run: |
+                echo "NODE_ENV=test" > apps/backend/.env.test
+                echo "PORT=3000" >> apps/backend/.env.test
+                echo "DB_URL=postgresql://tester:testpassword@localhost:5432/tms_db_test" >> apps/backend/.env.test
+
             - name: Run E2E tests
               uses: cypress-io/github-action@v6
               with:
