@@ -24,16 +24,13 @@ jobs:
             - name: Install dependencies
               run: npm ci
 
-            - name: Generate Prisma client
-              run: npx prisma generate --schema=./apps/backend/prisma/schema.prisma
-
             - name: Build desktop app
               run: npm run build --workspace=apps/desktop
 
             - name: Run E2E tests
               uses: cypress-io/github-action@v6
               with:
-                start: npm run start:test:local --workspace=apps/backend
+                start: npm run start:test:local:with-generate --workspace=apps/backend
                 wait-on: 'http://localhost:3000'
 
     build-and-deploy-backend:
