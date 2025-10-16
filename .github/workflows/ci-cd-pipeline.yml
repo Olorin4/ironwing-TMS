@@ -25,7 +25,7 @@ jobs:
               run: npm ci
 
             - name: Generate Prisma client
-              run: npx prisma generate
+              run: npx prisma generate --schema=./apps/backend/prisma/schema.prisma
 
             - name: Build desktop app
               run: npm run build --workspace=apps/desktop
