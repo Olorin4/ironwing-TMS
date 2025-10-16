@@ -8,7 +8,7 @@
         "start": "node src/app.js",
         "start:dev": "dotenv -e .env.development -- nodemon src/app.js",
         "start:prod": "dotenv -e .env.production -- node src/app.js",
-        "start:test:local": "dotenv -e .env.test -- node src/app.js",
+        "start:test:local": "if [ -n \"$DB_URL\" ]; then node src/app.js; else dotenv -e .env.test -- node src/app.js; fi",
         "start:test:local:with-generate": "npx prisma generate && npm run start:test:local",
         "test": "dotenv -e .env.test -- jest --passWithNoTests",
         "lint": "eslint src --ext .js",
