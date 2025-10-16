@@ -45,6 +45,8 @@ jobs:
               with:
                 start: npm run start:test:local:with-generate --workspace=apps/backend
                 wait-on: 'http://localhost:3000'
+              env:
+                DB_URL: postgresql://tester:testpassword@localhost:5432/tms_db_test
 
     build-and-deploy-backend:
         needs: e2e-tests
